@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Set;
 
@@ -26,6 +27,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @NotNull
     @Column(nullable = false)
     private String fullName;
 
@@ -36,12 +38,9 @@ public class User {
     @Column(nullable = false)
     private UserRole role; // CLIENT or ADMIN
 
-
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Booking> bookings;
 
-    // Setters for the fields
     public void setEmail(String email) {
         this.email = email;
     }
@@ -58,22 +57,18 @@ public class User {
         this.role = role;
     }
 
-    // Getter for password
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
-    // Getter for id
     public Long getId() {
         return id;
     }
 
-    // Getter for email
     public String getEmail() {
         return email;
     }
 
-    // Getter for fullName
     public String getFullName() {
         return fullName;
     }
