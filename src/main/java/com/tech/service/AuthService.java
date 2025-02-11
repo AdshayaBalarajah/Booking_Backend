@@ -1,5 +1,6 @@
 package com.tech.service;
 
+import com.tech.dto.AuthResponse;
 import com.tech.entity.*;
 import com.tech.repository.ForgotPasswordRepository;
 import com.tech.repository.RefreshTokenRepository;
@@ -42,10 +43,8 @@ public class AuthService {
         this.refreshTokenService = refreshTokenService;
     }
 
-    public ApiResponse register(RegisterRequest registerRequest) {
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            return new ApiResponse(false, "Email already registered");
-        }
+    public AuthResponse register(RegisterRequest registerRequest) {
+
 
         User user = new User();
         user.setEmail(registerRequest.getEmail());
@@ -56,10 +55,23 @@ public class AuthService {
         user.setRole(UserRole.USER);
 
         userRepository.save(user);
-        return new ApiResponse(true, "Registration successful");
+
+        String token = jwtUtil.generateToken(user);
+
+        // Generate a refresh token
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
+        return AuthResponse.builder()
+                .userid(user.getId())
+                .accessToken(token)
+                .refreshToken(refreshToken.getToken())
+                .build();
+
+
+//        return new ApiResponse(true, "Registration successful");
     }
 
-    public Object login(LoginRequest loginRequest) {
+    public AuthResponse login(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -73,12 +85,13 @@ public class AuthService {
         // Generate a refresh token
          RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
-        Map<String, Object> authResponse = new HashMap<>();
-        authResponse.put("token", token);
-        authResponse.put("refreshToken", refreshToken.getToken());
-        authResponse.put("user", user);
+        return AuthResponse.builder()
+                .userid(user.getId())
+                .accessToken(token)
+                .refreshToken(refreshToken.getToken())
+                .build();
 
-        return authResponse;
+
     }
 
     public Object refreshToken(String token) {

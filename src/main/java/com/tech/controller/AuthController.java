@@ -1,5 +1,6 @@
 package com.tech.controller;
 
+import com.tech.dto.AuthResponse;
 import com.tech.entity.ApiResponse;
 import com.tech.request.LoginRequest;
 import com.tech.request.RegisterRequest;
@@ -23,14 +24,14 @@ public class AuthController {
 
     // POST /auth/register
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest registerRequest) {
-        ApiResponse response = authService.register(registerRequest);
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest registerRequest) {
+        AuthResponse response = authService.register(registerRequest);
         return ResponseEntity.ok(response);
     }
 
     // POST /auth/login
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         // Return JWT token and user details on successful authentication.
         return ResponseEntity.ok(authService.login(loginRequest));
     }
