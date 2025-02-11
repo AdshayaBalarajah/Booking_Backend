@@ -54,4 +54,10 @@ public class AuthController {
         ApiResponse response = authService.resetPassword(resetPasswordRequest);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("test")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("Secured end point.");
+    }
+
 }

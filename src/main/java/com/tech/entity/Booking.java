@@ -46,10 +46,9 @@ public class Booking {
     }
 
 
-
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin; // Admin who manages the appointment
+//    @ManyToOne
+//    @JoinColumn(name = "admin_id")
+//    private Admin admin; // Admin who manages the appointment
 
     // Manually add setters for properties in case Lombok isn't generating them
     public void setUserNotes(String userNotes) {

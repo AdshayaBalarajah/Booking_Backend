@@ -24,9 +24,9 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private User user; // Notification receiver (User)
 
-    @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin; // Optional: Admin notifications
+//    @ManyToOne
+//    @JoinColumn(name = "admin_id")
+//    private Admin admin; // Optional: Admin notifications
 
     @Column(nullable = false)
     private String message;

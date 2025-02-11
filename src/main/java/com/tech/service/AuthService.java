@@ -26,18 +26,20 @@ public class AuthService {
     private final ForgotPasswordRepository forgotPasswordRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final RefreshTokenService refreshTokenService;
 
     @Autowired
     public AuthService(UserRepository userRepository,
                        RefreshTokenRepository refreshTokenRepository,
                        ForgotPasswordRepository forgotPasswordRepository,
                        PasswordEncoder passwordEncoder,
-                       JwtUtil jwtUtil) {
+                       JwtUtil jwtUtil, RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.refreshTokenRepository = refreshTokenRepository;
         this.forgotPasswordRepository = forgotPasswordRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public ApiResponse register(RegisterRequest registerRequest) {
@@ -69,11 +71,7 @@ public class AuthService {
         String token = jwtUtil.generateToken(user);
 
         // Generate a refresh token
-        RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setToken(UUID.randomUUID().toString());
-        refreshToken.setUser(user);
-        refreshToken.setExpiryDate(LocalDateTime.now().plusDays(7));  // for example, expires in 7 days
-        refreshTokenRepository.save(refreshToken);
+         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
         Map<String, Object> authResponse = new HashMap<>();
         authResponse.put("token", token);

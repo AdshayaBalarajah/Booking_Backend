@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class BookingDTO {
     private Long id;
     private Long userId;
-    private Long consultantId;
+    private String consultantName;
     private LocalDateTime appointmentDateTime;
     private String status; // PENDING, ACCEPTED, DECLINED, COMPLETED
-    private String notes;
+    private String userNotes;
 }
