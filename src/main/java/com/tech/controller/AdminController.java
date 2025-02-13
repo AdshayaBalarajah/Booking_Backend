@@ -25,16 +25,12 @@ public class AdminController {
         this.bookingService = bookingService;
     }
 
-    // GET /admin/appointments
-    // Retrieves all appointments for the admin dashboard.
     @GetMapping("/appointments")
     public ResponseEntity<List<BookingDTO>> getAllAppointments() {
         List<Booking> bookings = adminService.getAllAppointments();
-
         List<BookingDTO> bookingDTOs = bookings.stream()
                 .map(this::convertToDTO)
                 .toList();
-
         return ResponseEntity.ok(bookingDTOs);
     }
 
@@ -61,8 +57,6 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-    // PUT /admin/appointments/{id}/status
-    // Allows admin to update the status of an appointment.
     @PutMapping("/appointments/{id}/status")
     public ResponseEntity<ApiResponse> updateBookingStatus(
             @PathVariable Long id,
@@ -71,15 +65,13 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-    // Optional: Manage time slots
-    // POST /admin/slots?date=YYYY-MM-DD&timeSlot=HH:mm
+    // **Updated to check for duplicate time slots**
     @PostMapping("/slots")
     public ResponseEntity<ApiResponse> addTimeSlot(@RequestParam String date, @RequestParam String timeSlot) {
         ApiResponse response = adminService.addTimeSlot(date, timeSlot);
         return ResponseEntity.ok(response);
     }
 
-    // DELETE /admin/slots?date=YYYY-MM-DD&timeSlot=HH:mm
     @DeleteMapping("/slots")
     public ResponseEntity<ApiResponse> removeTimeSlot(@RequestParam String date, @RequestParam String timeSlot) {
         ApiResponse response = adminService.removeTimeSlot(date, timeSlot);
