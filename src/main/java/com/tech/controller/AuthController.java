@@ -29,12 +29,20 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    // POST /auth/register-admin
+    @PostMapping("/register-admin")
+    public ResponseEntity<AuthResponse> registerAdmin(@RequestBody RegisterRequest registerRequest) {
+        AuthResponse response = authService.registerAdmin(registerRequest);
+        return ResponseEntity.ok(response);
+    }
+
     // POST /auth/login
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         // Return JWT token and user details on successful authentication.
         return ResponseEntity.ok(authService.login(loginRequest));
     }
+
 
     // POST /auth/refresh-token
     @PostMapping("/refresh-token")

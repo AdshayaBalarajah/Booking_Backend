@@ -71,4 +71,12 @@ public class AdminService {
         // Implement time slot removal logic if storing slots in the database.
         return new ApiResponse(true, "Time slot removed successfully for date " + dateStr);
     }
+
+    public ApiResponse cancelAppointment(Long id) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(
+                ()-> new RuntimeException("Appointment not found"));
+        bookingRepository.delete(booking);
+
+        return new ApiResponse(true, "Appointment cancelled successfully");
+    }
 }

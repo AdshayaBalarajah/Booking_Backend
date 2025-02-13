@@ -63,6 +63,7 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .userid(user.getId())
+                .userRole(user.getRole())
                 .accessToken(token)
                 .refreshToken(refreshToken.getToken())
                 .build();
@@ -87,11 +88,10 @@ public class AuthService {
 
         return AuthResponse.builder()
                 .userid(user.getId())
+                .userRole(user.getRole())
                 .accessToken(token)
                 .refreshToken(refreshToken.getToken())
                 .build();
-
-
     }
 
     public Object refreshToken(String token) {
@@ -129,5 +129,31 @@ public class AuthService {
         forgotPasswordRepository.delete(forgotPassword);
 
         return new ApiResponse(true, "Password reset successfully");
+    }
+
+    public AuthResponse registerAdmin(RegisterRequest registerRequest) {
+
+        User user = User.builder()
+                .fullName(registerRequest.getName())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .role(UserRole.ADMIN)
+                .build();
+
+        userRepository.save(user);
+
+        String token = jwtUtil.generateToken(user);
+
+        // Generate a refresh token
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
+
+        return AuthResponse.builder()
+                .userid(user.getId())
+                .userRole(user.getRole())
+                .accessToken(token)
+                .refreshToken(refreshToken.getToken())
+                .build();
+
+
     }
 }
